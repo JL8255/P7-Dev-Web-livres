@@ -3,7 +3,7 @@ const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 
 
-exports.signup = (req, res, next) => {
+exports.signup = (req, res, next) => { // Ajout de l'utilisateur à la base de donnée avec hachage du mdp.
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
         const user = new User({
@@ -17,7 +17,7 @@ exports.signup = (req, res, next) => {
         .catch(error => res.status(500).json({ error }));
 };
 
-exports.login = (req, res, next) => {
+exports.login = (req, res, next) => { // Vérification des informations d'authentification de l'utilisateur
     User.findOne({ email: req.body.email })
         .then(user => {
             if (!user) {
