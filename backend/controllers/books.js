@@ -3,7 +3,6 @@ const fs = require('fs');
 
 exports.createBook = (req, res, next) => { // Création d'un livre dans la BD
     const bookObject = JSON.parse(req.body.book);
-    // delete bookObject._id;
     delete bookObject._userId;
     const book = new Book({
         ...bookObject,
@@ -62,16 +61,37 @@ exports.getOneBook = (req, res, next) => {  // Renvoie le livre avec l’_id fou
         .catch(error => res.status(404).json({ error }));
 };
 
+exports.getBestrating = (req, res, next) => { // Renvoie les 3 livres les ayant la meilleure note moyenne
+    Book.find()
+        .then(books => {
+            books.sort((a, b) => b.averageRating - a.averageRating);
+            const bestRatedBooks = books.slice(0, 3);
+            res.status(200).json(bestRatedBooks)
+        })
+        .catch(error => res.status(400).json({ error }));
+};
+
 exports.getAllBooks = (req, res, next) => {  // Renvoie un tableau de tous les livres de la base de données.
     Book.find()
         .then(books => res.status(200).json(books))
         .catch(error => res.status(400).json({ error }));
 };
 
-exports.getBeastrating = (req, res, next) => { // Renvoie les 3 livres les ayant la meilleure note moyenne
-
-};
-
 exports.rateABook = (req, res, next) => {  // Donne une note à un livre
-
+    Book.findByIdAndUpdate({ _id: req.params.id })
+        .then(book => {
+            if (book.ratings.find(rating => rating.userId === req.auth.userId)) {
+                res.status(401).json({ message: 'Not authorized' })
+            } else {
+                book.ratings.push({
+                    userId: req.auth.userId,
+                    grade: req.body.rating
+                })
+                res.status(200).json(book)
+            }
+            let newAverage = Math.round(book.ratings.reduce((accumulator, currentValue) => accumulator + currentValue.grade, 0) * 10 / book.ratings.length) / 10;
+            book.averageRating = newAverage;
+            return book.save();
+        })
+        .catch(error => res.status(400).json({ error }));
 };
