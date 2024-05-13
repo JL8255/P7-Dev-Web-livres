@@ -1,23 +1,49 @@
 const Book = require('../models/book');
 const fs = require('fs');
+const sharp = require('sharp');
 
 exports.createBook = (req, res, next) => { // Création d'un livre dans la BD
     const bookObject = JSON.parse(req.body.book);
     delete bookObject._userId;
+
+    // Le chemin du fichier sur le disque
+    const filepath = req.file.path;
+    const outPut = "/images_uploaded/" + req.file.filename.slice(0, (req.file.filename).length - 4) + "_compressed.jpg"
+
+    // Traitement de l'image avec Sharp
+    sharp(filepath)
+        .resize(206, null)  // redimensionnement
+        .toFormat('jpeg')  // conversion en webp
+        .jpeg({ quality: 80 })  // définition de la qualité
+        .toFile('.' + outPut)  // sauvegarde du fichier traité
+
     const book = new Book({
         ...bookObject,
         userId: req.auth.userId, // Récupère l'id de l'authentification
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+        imageUrl: `${req.protocol}://${req.get('host')}${outPut}`
     });
     book.save()
-        .then(() => { res.status(201).json({ message: 'Objet enregistré !' }) })
+        .then(() => { res.status(201).json(book) })
         .catch(error => { res.status(400).json({ error }) })
+
 };
 
 exports.modifyBook = (req, res, next) => { // MAJ d'un livre de la BD
+
+    // Le chemin du fichier sur le disque
+    const filepath = req.file.path;
+    const outPut = "/images_uploaded/" + req.file.filename.slice(0, (req.file.filename).length - 4) + "_compressed.jpg"
+
+    // Traitement de l'image avec Sharp
+    sharp(filepath)
+        .resize(206, null)  // redimensionnement
+        .toFormat('jpeg')  // conversion en webp
+        .jpeg({ quality: 80 })  // définition de la qualité
+        .toFile('.' + outPut)  // sauvegarde du fichier traité
+
     const bookObject = req.file ? {
         ...JSON.parse(req.body.book),
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+        imageUrl: `${req.protocol}://${req.get('host')}${outPut}`
     } : { ...req.body };
 
     delete bookObject._userId;
@@ -27,7 +53,7 @@ exports.modifyBook = (req, res, next) => { // MAJ d'un livre de la BD
                 res.status(401).json({ message: 'Not authorized' });
             } else {
                 Book.updateOne({ _id: req.params.id }, { ...bookObject, _id: req.params.id })
-                    .then(() => res.status(200).json({ message: 'Objet modifié!' }))
+                    .then(() => res.status(200).json(book))
                     .catch(error => res.status(401).json({ error }));
             }
         })

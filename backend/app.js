@@ -22,7 +22,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/images_uploaded', express.static(path.join(__dirname, 'images_uploaded')));
 app.use('/api/books', booksRoutes);
 app.use('/api/auth', userRoutes);
 
