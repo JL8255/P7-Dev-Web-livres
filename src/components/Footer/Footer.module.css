@@ -10,18 +10,23 @@
     color: #2C1810
 }
 
+.FooterOff {
+    display: none;
+}
+
 .MapBlock {
     display: flex;
     margin-block: 16px;
     align-items: center;
 
 }
+
 .MapBlock a {
     color: #796157;
 }
+
 .MapBlock img {
     margin-right: 16px;
 }
-.MapLink {
 
-}
+.MapLink {}

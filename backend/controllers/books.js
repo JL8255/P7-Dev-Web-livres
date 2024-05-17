@@ -2,7 +2,7 @@ const Book = require('../models/book');
 const fs = require('fs');
 const sharp = require('sharp');
 
-exports.createBook = (req, res, next) => { // Création d'un livre dans la BD
+exports.createBook = async (req, res, next) => { // Création d'un livre dans la BD
     const bookObject = JSON.parse(req.body.book);
     delete bookObject._userId;
 
@@ -11,8 +11,8 @@ exports.createBook = (req, res, next) => { // Création d'un livre dans la BD
     const outPut = "/images_uploaded/" + req.file.filename.slice(0, (req.file.filename).length - 4) + "_compressed.jpg"
 
     // Traitement de l'image avec Sharp
-    sharp(filepath)
-        .resize(206, null)  // redimensionnement
+    await sharp(filepath)
+        .resize(405, null)  // redimensionnement
         .toFormat('jpeg')  // conversion en webp
         .jpeg({ quality: 80 })  // définition de la qualité
         .toFile('.' + outPut)  // sauvegarde du fichier traité
@@ -26,6 +26,13 @@ exports.createBook = (req, res, next) => { // Création d'un livre dans la BD
         .then(() => { res.status(201).json(book) })
         .catch(error => { res.status(400).json({ error }) })
 
+    // Suppression de l'image temporaire
+    /*
+    console.log(`${filepath}`)
+    fs.unlink(`${filepath}`, (error) => {
+        if (error) { console.log('Une erreur s\'est produite lors de la suppression de l\'image temporaire!', error) }
+    })
+    */
 };
 
 exports.modifyBook = (req, res, next) => { // MAJ d'un livre de la BD
@@ -68,10 +75,11 @@ exports.deleteBook = (req, res, next) => { // Efface un livre de la BD
             if (book.userId != req.auth.userId) {
                 res.status(401).json({ message: 'Not authorized' });
             } else {
-                const filename = book.imageUrl.split('/images/')[1];
-                fs.unlink(`images/${filename}`, () => {
+                const filename = book.imageUrl.split('/images_uploaded/')[1];
+                console.log(`images_uploaded/${filename}`)
+                fs.unlink(`images_uploaded/${filename}`, () => {
                     Book.deleteOne({ _id: req.params.id })
-                        .then(() => { res.status(200).json({ message: 'Objet supprimé !' }) })
+                        .then(() => { res.status(200).json({ message: 'Livre supprimé !' }) })
                         .catch(error => res.status(401).json({ error }));
                 });
             }

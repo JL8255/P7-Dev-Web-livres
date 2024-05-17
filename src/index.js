@@ -1,6 +1,7 @@
 /*
      eslint-disable react/jsx-filename-extension
 */
+//require('dotenv').config()
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';

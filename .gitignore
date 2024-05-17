@@ -2,6 +2,10 @@
 
 # dependencies
 /backend/images
+<<<<<<< Updated upstream
+=======
+/backend/.env
+>>>>>>> Stashed changes
 /backend/node_modules
 /node_modules
 /.pnp

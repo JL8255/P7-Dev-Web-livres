@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import * as PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +8,10 @@ import { storeInLocalStorage } from '../../lib/common';
 import { ReactComponent as Logo } from '../../images/Logo.svg';
 import styles from './SignIn.module.css';
 
-function SignIn({ setUser }) {
+function SignIn({ setUser, displayHF, setDisplayHF }) {
+
+  useEffect(() => { setDisplayHF(displayHF = false) }, [])
+
   const navigate = useNavigate();
   const { user, authenticated } = useUser();
   if (user || authenticated) {

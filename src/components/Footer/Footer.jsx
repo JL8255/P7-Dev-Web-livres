@@ -2,9 +2,9 @@ import React from 'react';
 import Map from '../../images/map_footer.png';
 import styles from './Footer.module.css';
 
-function Footer() {
+function Footer({ displayHF }) {
   return (
-    <footer className={styles.Footer}>
+    <footer className={displayHF ? styles.Footer : styles.FooterOff}>
       <div className={styles.MapBlock}>
         <img src={Map} alt="Position Géographique Mon Vieux Grimoire" />
         <address>

@@ -5,7 +5,7 @@ import * as PropTypes from 'prop-types';
 import styles from './Header.module.css';
 import Logo from '../../images/Logo.png';
 
-function Header({ user, setUser }) {
+function Header({ user, setUser, displayHF }) {
   const navigate = useNavigate();
   const disconnect = () => {
     localStorage.clear();
@@ -14,7 +14,7 @@ function Header({ user, setUser }) {
   };
 
   return (
-    <header className={styles.Header}>
+    <header className={displayHF ? styles.Header : styles.HeaderOff}>
       <div className="container">
         <img src={Logo} alt="logo mpm vieu grimoire" />
         <ul>

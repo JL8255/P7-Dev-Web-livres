@@ -6,6 +6,10 @@
     align-items: center;
 }
 
+.HeaderOff {
+    display: none;
+}
+
 .Header div {
     display: flex;
     justify-content: space-between;

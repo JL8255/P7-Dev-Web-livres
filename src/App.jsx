@@ -15,6 +15,7 @@ import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 
 function App() {
   const [user, setUser] = useState(null);
+  const [displayHF, setDisplayHF] = useState(true)
   const { connectedUser } = useUser();
 
   useEffect(() => {
@@ -24,15 +25,15 @@ function App() {
     <BrowserRouter>
       <div>
         <ScrollToTop />
-        <Header user={user} setUser={setUser} />
+        <Header user={user} setUser={setUser} displayHF={displayHF} />
         <Routes>
-          <Route index element={<Home />} />
-          <Route path={APP_ROUTES.SIGN_IN} element={<SignIn setUser={setUser} />} />
+          <Route index element={<Home displayHF={displayHF} setDisplayHF={setDisplayHF} />} />
+          <Route path={APP_ROUTES.SIGN_IN} element={<SignIn setUser={setUser} displayHF={displayHF} setDisplayHF={setDisplayHF} />} />
           <Route path={APP_ROUTES.BOOK} element={<Book />} />
           <Route path={APP_ROUTES.UPDATE_BOOK} element={<UpdateBook />} />
           <Route path={APP_ROUTES.ADD_BOOK} element={<AddBook />} />
         </Routes>
-        <Footer />
+        <Footer displayHF={displayHF} />
       </div>
     </BrowserRouter>
   );

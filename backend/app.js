@@ -5,7 +5,12 @@ const booksRoutes = require('./routes/books');
 const userRoutes = require('./routes/user');
 const path = require('path');
 
+<<<<<<< Updated upstream
 mongoose.connect('mongodb+srv://appP7:appP7@clusteroc.v0ajq8e.mongodb.net/P7?retryWrites=true&w=majority&appName=ClusterOC',
+=======
+//mongoose.connect(process.env.DATABASE,
+mongoose.connect('mongodb+srv://mongodbaccess:mongodbaccess@clusteroc.v0ajq8e.mongodb.net/test?retryWrites=true&w=majority&appName=ClusterOC',
+>>>>>>> Stashed changes
   {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -23,6 +28,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/images_uploaded', express.static(path.join(__dirname, 'images_uploaded')));
+app.use('/images_temp', express.static(path.join(__dirname, 'images_temp')));
 app.use('/api/books', booksRoutes);
 app.use('/api/auth', userRoutes);
 
