@@ -5,7 +5,7 @@ const booksRoutes = require('./routes/books');
 const userRoutes = require('./routes/user');
 const path = require('path');
 
-mongoose.connect('mongodb+srv://mongodbaccess:mongodbaccess@clusteroc.v0ajq8e.mongodb.net/test?retryWrites=true&w=majority&appName=ClusterOC',
+mongoose.connect('mongodb+srv://appP7:appP7@clusteroc.v0ajq8e.mongodb.net/P7?retryWrites=true&w=majority&appName=ClusterOC',
   {
     useNewUrlParser: true,
     useUnifiedTopology: true
