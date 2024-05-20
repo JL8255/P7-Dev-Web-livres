@@ -15,7 +15,7 @@ import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 
 function App() {
   const [user, setUser] = useState(null);
-  const [displayHF, setDisplayHF] = useState(true)
+  const [displayHF, setDisplayHF] = useState(true) // Gestion de l'affichage du header et du footer dans la page de login
   const { connectedUser } = useUser();
 
   useEffect(() => {

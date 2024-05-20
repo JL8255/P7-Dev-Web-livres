@@ -1,7 +1,7 @@
 const http = require('http');
 const app = require('./app');
 
-const normalizePort = val => {
+const normalizePort = val => { // renvoi d'un port valide numéro ou chaine de caractère
   const port = parseInt(val, 10);
 
   if (isNaN(port)) {
@@ -12,10 +12,10 @@ const normalizePort = val => {
   }
   return false;
 };
-const port = normalizePort(process.env.PORT || '4000');
+const port = normalizePort(process.env.PORT || '4000'); // Utilisation de la variable d'env pour la mise en prod || ou à défaut le port 4000
 app.set('port', port);
 
-const errorHandler = error => {
+const errorHandler = error => { // Recherche et gère les différnetes erreurs
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -39,9 +39,8 @@ const server = http.createServer(app);
 
 server.on('error', errorHandler);
 server.on('listening', () => {
-  const address = server.address();
   const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + port;
   console.log('Listening on ' + bind);
 });
 
-server.listen(port);
+server.listen(port); // écouteur d'événement consignant le port ou le canal nommé pour l'exécution du serveur

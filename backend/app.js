@@ -5,8 +5,8 @@ const booksRoutes = require('./routes/books');
 const userRoutes = require('./routes/user');
 const path = require('path');
 
-//mongoose.connect(process.env.DATABASE,
-mongoose.connect('mongodb+srv://appP7:appP7@clusteroc.v0ajq8e.mongodb.net/P7?retryWrites=true&w=majority&appName=ClusterOC',
+//mongoose.connect(process.env.DATABASE, --> Avec l'utilisation d'une variable d'environnement 'DATABASE' lors de la mise en production avec le l'id et le mdp de la BD définitive
+mongoose.connect('mongodb+srv://appP7:appP7@clusteroc.v0ajq8e.mongodb.net/P7?retryWrites=true&w=majority&appName=ClusterOC', // BD test
 
   {
     useNewUrlParser: true,
