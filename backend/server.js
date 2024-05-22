@@ -15,7 +15,7 @@ const normalizePort = val => { // renvoi d'un port valide numéro ou chaine de c
 const port = normalizePort(process.env.PORT || '4000'); // Utilisation de la variable d'env pour la mise en prod || ou à défaut le port 4000
 app.set('port', port);
 
-const errorHandler = error => { // Recherche et gère les différnetes erreurs
+const errorHandler = error => { // Recherche et gère les différentes erreurs
   if (error.syscall !== 'listen') {
     throw error;
   }

@@ -11,6 +11,7 @@ exports.createBook = async (req, res, next) => { // Création d'un livre dans la
     const outPut = "/images_uploaded/" + req.file.filename.slice(0, (req.file.filename).length - 4) + "_compressed.jpg"
 
     // Traitement de l'image avec Sharp
+    sharp.cache(false)
     await sharp(filepath)
         .resize(405, null)  // redimensionnement
         .toFormat('jpeg')  // conversion en webp
@@ -26,27 +27,31 @@ exports.createBook = async (req, res, next) => { // Création d'un livre dans la
         .then(() => { res.status(201).json(book) })
         .catch(error => { res.status(400).json({ error }) })
 
-    // Point d'amélioration --> Suppression de l'image temporaire avec fs.unlink
-    /*
-    console.log(`${filepath}`)
     fs.unlink(`${filepath}`, (error) => {
         if (error) { console.log('Une erreur s\'est produite lors de la suppression de l\'image temporaire!', error) }
     })
-    */
 };
 
-exports.modifyBook = (req, res, next) => { // MAJ d'un livre de la BD
+exports.modifyBook = async (req, res, next) => { // MAJ d'un livre de la BD
 
-    // Le chemin du fichier sur le disque
-    const filepath = req.file.path;
-    const outPut = "/images_uploaded/" + req.file.filename.slice(0, (req.file.filename).length - 4) + "_compressed.jpg"
+    let outPut = ""
 
-    // Traitement de l'image avec Sharp
-    sharp(filepath)
-        .resize(206, null)  // redimensionnement
-        .toFormat('jpeg')  // conversion en webp
-        .jpeg({ quality: 80 })  // définition de la qualité
-        .toFile('.' + outPut)  // sauvegarde du fichier traité
+    if (req.file != undefined) {
+        const filepath = req.file.path;
+        outPut = "/images_uploaded/" + req.file.filename.slice(0, (req.file.filename).length - 4) + "_compressed.jpg"
+
+        // Traitement de l'image avec Sharp
+        sharp.cache(false)
+        await sharp(filepath)
+            .resize(206, null)  // redimensionnement
+            .toFormat('jpeg')  // conversion en webp
+            .jpeg({ quality: 80 })  // définition de la qualité
+            .toFile('.' + outPut)  // sauvegarde du fichier traité
+
+        fs.unlink(`${filepath}`, (error) => {
+            if (error) { console.log('Une erreur s\'est produite lors de la suppression de l\'image temporaire!', error) }
+        })
+    }
 
     const bookObject = req.file ? {
         ...JSON.parse(req.body.book),
@@ -62,6 +67,10 @@ exports.modifyBook = (req, res, next) => { // MAJ d'un livre de la BD
                 Book.updateOne({ _id: req.params.id }, { ...bookObject, _id: req.params.id }) // Mise à jour
                     .then(() => res.status(200).json(book))
                     .catch(error => res.status(401).json({ error }));
+                const filename = book.imageUrl.split('/images_uploaded/')[1];
+                fs.unlink(`images_uploaded/${filename}`, (error) => { // Suppression de l'image remplacée
+                    if (error) { console.log('Une erreur s\'est produite lors de la suppression de l\'image temporaire!', error) }
+                })
             }
         })
         .catch((error) => {

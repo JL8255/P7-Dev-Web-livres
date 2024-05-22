@@ -2,7 +2,6 @@ const bcrypt = require('bcrypt');
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 
-
 exports.signup = (req, res, next) => { // 1. Ajout de l'utilisateur à la base de donnée avec hachage du mdp.
     bcrypt.hash(req.body.password, 10) // hashage du mpd
         .then(hash => {
