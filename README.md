@@ -39,3 +39,11 @@ iq : Max@free.fr    --> Visiteur, a noté "Chroniques des années noires" 5/5
 pw : Max
 
 note moyenne chroniques des années noires = (1/5 + 2/5 + 5/5)/3 = 2.666667
+
+------------------
+
+Corrections :
+
+Erreur d'implémentation de sharp dans le middleware modifyBook --> Debug fait : sharp fonctionnel.
+Application / activation des fonctions de suppression des images temporaires avec fs.unlink.
+Ajout au gitignore l'ensemble du frontend.
